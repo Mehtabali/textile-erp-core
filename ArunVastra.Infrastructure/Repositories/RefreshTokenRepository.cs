@@ -6,14 +6,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ArunVastra.Infrastructure.Repositories;
 
-public sealed class RefreshTokenRepository : IRefreshTokenRepository
+public sealed class RefreshTokenRepository(ArunVastraDbContext dbContext) : IRefreshTokenRepository
 {
-    private readonly ArunVastraDbContext _dbContext;
-
-    public RefreshTokenRepository(ArunVastraDbContext dbContext)
-    {
-        _dbContext = dbContext;
-    }
+    private readonly ArunVastraDbContext _dbContext = dbContext;
 
     public async Task AddAsync(RefreshTokenModel refreshToken, CancellationToken cancellationToken = default)
     {
