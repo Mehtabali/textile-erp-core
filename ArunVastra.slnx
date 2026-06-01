@@ -1,0 +1,6 @@
+<Solution>
+  <Project Path="ArunVastra.Api/ArunVastra.Api.csproj" />
+  <Project Path="ArunVastra.Application/ArunVastra.Application.csproj" />
+  <Project Path="ArunVastra.Domain/ArunVastra.Domain.csproj" />
+  <Project Path="ArunVastra.Infrastructure/ArunVastra.Infrastructure.csproj" />
+</Solution>
