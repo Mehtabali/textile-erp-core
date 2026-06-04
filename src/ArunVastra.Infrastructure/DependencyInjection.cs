@@ -19,7 +19,9 @@ public static class DependencyInjection
             options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
 
         services.AddScoped<IAuthService, AuthService>();
+        services.AddScoped<IInternalUserService, InternalUserService>();
         services.AddScoped<IUserRepository, UserRepository>();
+        services.AddScoped<IInternalUserRepository, InternalUserRepository>();
         services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
         services.AddScoped<IPasswordService, PasswordService>();
         services.AddScoped<IJwtTokenService, JwtTokenService>();
