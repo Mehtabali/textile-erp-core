@@ -1,6 +1,18 @@
 <Solution>
-  <Project Path="ArunVastra.Api/ArunVastra.Api.csproj" />
-  <Project Path="ArunVastra.Application/ArunVastra.Application.csproj" />
-  <Project Path="ArunVastra.Domain/ArunVastra.Domain.csproj" />
-  <Project Path="ArunVastra.Infrastructure/ArunVastra.Infrastructure.csproj" />
+  <Folder Name="/database/" />
+  <Folder Name="/database/migrations/">
+    <File Path="E:/arun-vastra-bhandar/001_auth_add_user_security_columns.sql" />
+    <File Path="E:/arun-vastra-bhandar/002_auth_create_user_refresh_tokens.sql" />
+  </Folder>
+  <Folder Name="/database/rollback/" />
+  <Folder Name="/database/seed/" />
+  <Folder Name="/src/">
+    <Project Path="src/ArunVastra.Api/ArunVastra.Api.csproj" />
+    <Project Path="src/ArunVastra.Application/ArunVastra.Application.csproj" />
+    <Project Path="src/ArunVastra.Domain/ArunVastra.Domain.csproj" />
+    <Project Path="src/ArunVastra.Infrastructure/ArunVastra.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/ArunVastra.Application.Tests/ArunVastra.Application.Tests.csproj" />
+  </Folder>
 </Solution>
