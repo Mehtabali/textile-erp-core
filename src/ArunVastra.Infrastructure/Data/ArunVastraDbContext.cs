@@ -37,7 +37,7 @@ public partial class ArunVastraDbContext : DbContext
             entity.Property(e => e.Btuser).HasColumnName("BTUser");
             entity.Property(e => e.Cityid).HasColumnName("CITYID");
             entity.Property(e => e.Created)
-                .HasDefaultValueSql("(getdate())", "DF_USERS_CREATED")
+                .HasDefaultValueSql("(getdate())")
                 .HasColumnType("smalldatetime")
                 .HasColumnName("CREATED");
             entity.Property(e => e.Description)
@@ -49,7 +49,7 @@ public partial class ArunVastraDbContext : DbContext
                 .IsUnicode(false)
                 .HasColumnName("EMAIL");
             entity.Property(e => e.Extracharges)
-                .HasDefaultValue(0m, "DF_USERS_EXTRACHARGES")
+                .HasDefaultValue(0m)
                 .HasColumnType("decimal(18, 2)")
                 .HasColumnName("EXTRACHARGES");
             entity.Property(e => e.Firstname)
@@ -64,7 +64,7 @@ public partial class ArunVastraDbContext : DbContext
             entity.Property(e => e.Isgstupdate)
                 .HasMaxLength(1)
                 .IsUnicode(false)
-                .HasDefaultValue("N", "DF_USERS_ISGSTUPDATE")
+                .HasDefaultValue("N")
                 .HasColumnName("ISGSTUPDATE");
             entity.Property(e => e.Lastloginat).HasColumnName("LASTLOGINAT");
             entity.Property(e => e.Lastname)
@@ -112,7 +112,7 @@ public partial class ArunVastraDbContext : DbContext
 
             entity.Property(e => e.Id).HasColumnName("ID");
             entity.Property(e => e.Createdat)
-                .HasDefaultValueSql("(sysutcdatetime())", "DF_USER_REFRESH_TOKENS_CREATEDAT")
+                .HasDefaultValueSql("(sysutcdatetime())")
                 .HasColumnName("CREATEDAT");
             entity.Property(e => e.Expiresat).HasColumnName("EXPIRESAT");
             entity.Property(e => e.Revokedat).HasColumnName("REVOKEDAT");
