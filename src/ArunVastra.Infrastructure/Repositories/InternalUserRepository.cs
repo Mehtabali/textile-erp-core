@@ -10,6 +10,13 @@ namespace ArunVastra.Infrastructure.Repositories;
 
 public sealed class InternalUserRepository : IInternalUserRepository
 {
+    private static readonly int[] InternalUserRoles =
+    [
+        (int)UserRole.Admin,
+        (int)UserRole.FloorManager,
+        (int)UserRole.Accounts
+    ];
+
     private readonly ArunVastraDbContext _dbContext;
 
     public InternalUserRepository(ArunVastraDbContext dbContext)
@@ -23,9 +30,7 @@ public sealed class InternalUserRepository : IInternalUserRepository
     {
         var query = _dbContext.Users
             .AsNoTracking()
-            .Where(user =>
-                user.Role == (int)UserRole.Admin ||
-                user.Role == (int)UserRole.FloorManager);
+            .Where(user => InternalUserRoles.Contains(user.Role));
 
         if (!request.IncludeLocked)
         {
@@ -40,9 +45,7 @@ public sealed class InternalUserRepository : IInternalUserRepository
                 user.Firstname.Contains(normalizedSearch) ||
                 user.Email.Contains(normalizedSearch) ||
                 (user.Phone != null && user.Phone.Contains(normalizedSearch)) ||
-                (user.Mobile != null && user.Mobile.Contains(normalizedSearch)) ||
-                (user.Gstin != null && user.Gstin.Contains(normalizedSearch)) ||
-                (user.Brandname != null && user.Brandname.Contains(normalizedSearch)));
+                (user.Mobile != null && user.Mobile.Contains(normalizedSearch)));
         }
 
         query = ApplyColumnFilters(query, request);
@@ -62,8 +65,6 @@ public sealed class InternalUserRepository : IInternalUserRepository
                 Role = user.Role,
                 Phone = user.Phone,
                 Mobile = user.Mobile,
-                Gstin = user.Gstin,
-                BrandName = user.Brandname,
                 Remarks = user.Description,
                 Status = !user.Locked,
                 LastLoginAt = user.Lastloginat
@@ -110,16 +111,6 @@ public sealed class InternalUserRepository : IInternalUserRepository
             query = query.Where(user => user.Mobile != null && user.Mobile.Contains(mobile));
         }
 
-        if (NormalizeFilter(filters.Gstin) is { } gstin)
-        {
-            query = query.Where(user => user.Gstin != null && user.Gstin.Contains(gstin));
-        }
-
-        if (NormalizeFilter(filters.BrandName) is { } brandName)
-        {
-            query = query.Where(user => user.Brandname != null && user.Brandname.Contains(brandName));
-        }
-
         if (!string.IsNullOrWhiteSpace(filters.Status))
         {
             var normalizedStatus = filters.Status.Trim().ToLowerInvariant();
@@ -161,12 +152,6 @@ public sealed class InternalUserRepository : IInternalUserRepository
             "mobile" => descending
                 ? query.OrderByDescending(user => user.Mobile).ThenBy(user => user.Userid)
                 : query.OrderBy(user => user.Mobile).ThenBy(user => user.Userid),
-            "gstin" => descending
-                ? query.OrderByDescending(user => user.Gstin).ThenBy(user => user.Userid)
-                : query.OrderBy(user => user.Gstin).ThenBy(user => user.Userid),
-            "brandName" => descending
-                ? query.OrderByDescending(user => user.Brandname).ThenBy(user => user.Userid)
-                : query.OrderBy(user => user.Brandname).ThenBy(user => user.Userid),
             "status" => descending
                 ? query.OrderByDescending(user => !user.Locked).ThenBy(user => user.Userid)
                 : query.OrderBy(user => !user.Locked).ThenBy(user => user.Userid),
@@ -191,8 +176,7 @@ public sealed class InternalUserRepository : IInternalUserRepository
             .AsNoTracking()
             .Where(user =>
                 user.Userid == userId &&
-                (user.Role == (int)UserRole.Admin ||
-                 user.Role == (int)UserRole.FloorManager))
+                InternalUserRoles.Contains(user.Role))
             .Select(user => ToInternalUserResponse(user))
             .SingleOrDefaultAsync(cancellationToken);
     }
@@ -220,15 +204,13 @@ public sealed class InternalUserRepository : IInternalUserRepository
             Email = model.Email,
             Phone = model.Phone,
             Mobile = model.Mobile,
-            Gstin = model.Gstin,
-            Brandname = model.BrandName,
             Pwhash = string.Empty,
             Passwordhash = model.PasswordHash,
             Passwordmigrated = true,
             Passwordresetrequired = false,
             Role = model.Role,
             Profit = 0,
-            Locked = !model.Status,
+            Locked = true,
             Description = model.Remarks,
             Created = now,
             Updatedat = now,
@@ -252,8 +234,7 @@ public sealed class InternalUserRepository : IInternalUserRepository
             .SingleOrDefaultAsync(
                 item =>
                     item.Userid == userId &&
-                    (item.Role == (int)UserRole.Admin ||
-                     item.Role == (int)UserRole.FloorManager),
+                    InternalUserRoles.Contains(item.Role),
                 cancellationToken);
 
         if (user is null)
@@ -265,8 +246,6 @@ public sealed class InternalUserRepository : IInternalUserRepository
         user.Email = model.Email;
         user.Phone = model.Phone;
         user.Mobile = model.Mobile;
-        user.Gstin = model.Gstin;
-        user.Brandname = model.BrandName;
         user.Description = model.Remarks;
         user.Role = model.Role;
         user.Locked = !model.Status;
@@ -286,8 +265,6 @@ public sealed class InternalUserRepository : IInternalUserRepository
             Email = user.Email,
             Phone = user.Phone,
             Mobile = user.Mobile,
-            Gstin = user.Gstin,
-            BrandName = user.Brandname,
             Remarks = user.Description,
             Status = !user.Locked,
             Role = user.Role,
@@ -299,7 +276,7 @@ public sealed class InternalUserRepository : IInternalUserRepository
 
     private static bool IsInternalUserRole(int role)
     {
-        return role is (int)UserRole.Admin or (int)UserRole.FloorManager;
+        return role is (int)UserRole.Admin or (int)UserRole.FloorManager or (int)UserRole.Accounts;
     }
 
     private static IQueryable<User> ApplyTypeFilter(IQueryable<User> query, string type)
@@ -319,6 +296,12 @@ public sealed class InternalUserRepository : IInternalUserRepository
             "floor".Contains(normalizedType, StringComparison.Ordinal))
         {
             return query.Where(user => user.Role == (int)UserRole.FloorManager);
+        }
+
+        if ("accounts".Contains(normalizedType, StringComparison.Ordinal) ||
+            "account".Contains(normalizedType, StringComparison.Ordinal))
+        {
+            return query.Where(user => user.Role == (int)UserRole.Accounts);
         }
 
         return query.Where(user => false);

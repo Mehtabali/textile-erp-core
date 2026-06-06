@@ -8,5 +8,6 @@ public enum UserRole
     Customer = 3,
     Agency = 4,
     Admin = 5,
-    FloorManager = 6
+    FloorManager = 6,
+    Accounts = 7
 }

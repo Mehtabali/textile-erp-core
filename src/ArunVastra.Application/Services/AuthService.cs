@@ -28,12 +28,12 @@ public sealed class AuthService : IAuthService
 
     public async Task<LoginResponse> LoginAsync(LoginRequest request, CancellationToken cancellationToken = default)
     {
-        var email = request.Email.Trim();
-
-        if (string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(request.Password))
+        if (string.IsNullOrWhiteSpace(request.Email) || string.IsNullOrWhiteSpace(request.Password))
         {
             return Failed("Email and password are required.");
         }
+
+        var email = request.Email.Trim();
 
         var user = await _userRepository.GetByEmailAsync(email, cancellationToken);
 

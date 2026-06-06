@@ -16,8 +16,40 @@ public partial class ArunVastraDbContext : DbContext
 
     public virtual DbSet<UserRefreshToken> UserRefreshTokens { get; set; }
 
+    public virtual DbSet<State> States { get; set; }
+
+    public virtual DbSet<City> Cities { get; set; }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.Entity<State>(entity =>
+        {
+            entity.ToTable("STATES");
+
+            entity.Property(e => e.Stateid).HasColumnName("STATEID");
+            entity.Property(e => e.Gststatecode).HasColumnName("GSTSTATECODE");
+            entity.Property(e => e.Statename)
+                .HasMaxLength(50)
+                .IsUnicode(false)
+                .HasColumnName("STATENAME");
+        });
+
+        modelBuilder.Entity<City>(entity =>
+        {
+            entity.ToTable("CITIES");
+
+            entity.Property(e => e.Cityid).HasColumnName("CITYID");
+            entity.Property(e => e.Cityname)
+                .HasMaxLength(50)
+                .IsUnicode(false)
+                .HasColumnName("CITYNAME");
+            entity.Property(e => e.Stateid).HasColumnName("STATEID");
+
+            entity.HasOne(d => d.State).WithMany(p => p.Cities)
+                .HasForeignKey(d => d.Stateid)
+                .HasConstraintName("FK_CITIES_STATES");
+        });
+
         modelBuilder.Entity<User>(entity =>
         {
             entity.ToTable("USERS");

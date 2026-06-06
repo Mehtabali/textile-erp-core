@@ -1,6 +1,6 @@
-namespace ArunVastra.Application.DTOs.Users.Internal;
+namespace ArunVastra.Application.DTOs.Users.Transport;
 
-public sealed class InternalUserResponse
+public sealed class TransportUserResponse
 {
     public int UserId { get; set; }
 
@@ -11,6 +11,20 @@ public sealed class InternalUserResponse
     public string? Phone { get; set; }
 
     public string? Mobile { get; set; }
+
+    public string? Gstin { get; set; }
+
+    public string? BrandName { get; set; }
+
+    public string? Address { get; set; }
+
+    public int? StateId { get; set; }
+
+    public string? StateName { get; set; }
+
+    public int? CityId { get; set; }
+
+    public string? CityName { get; set; }
 
     public string? Remarks { get; set; }
 

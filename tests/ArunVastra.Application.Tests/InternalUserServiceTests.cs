@@ -24,8 +24,6 @@ public sealed class InternalUserServiceTests
             Role = 5,
             Phone = " 011 ",
             Mobile = " 9999999999 ",
-            Gstin = " GST123 ",
-            BrandName = " AVB ",
             Remarks = " Buyer desk ",
             Status = false
         });
@@ -37,8 +35,6 @@ public sealed class InternalUserServiceTests
         Assert.Equal(5, repository.CreatedModel?.Role);
         Assert.Equal("011", repository.CreatedModel?.Phone);
         Assert.Equal("9999999999", repository.CreatedModel?.Mobile);
-        Assert.Equal("GST123", repository.CreatedModel?.Gstin);
-        Assert.Equal("AVB", repository.CreatedModel?.BrandName);
         Assert.Equal("Buyer desk", repository.CreatedModel?.Remarks);
         Assert.False(repository.CreatedModel?.Status);
         Assert.Equal("test@example.com", passwordService.LastUser?.Email);
@@ -103,8 +99,6 @@ public sealed class InternalUserServiceTests
                 Role = 6,
                 Phone = " 123 ",
                 Mobile = " 456 ",
-                Gstin = " GST ",
-                BrandName = " Brand ",
                 Remarks = " Notes ",
                 Status = false
             });
@@ -116,8 +110,6 @@ public sealed class InternalUserServiceTests
         Assert.Equal(6, repository.UpdatedModel?.Role);
         Assert.Equal("123", repository.UpdatedModel?.Phone);
         Assert.Equal("456", repository.UpdatedModel?.Mobile);
-        Assert.Equal("GST", repository.UpdatedModel?.Gstin);
-        Assert.Equal("Brand", repository.UpdatedModel?.BrandName);
         Assert.Equal("Notes", repository.UpdatedModel?.Remarks);
         Assert.False(repository.UpdatedModel?.Status);
     }
@@ -285,8 +277,6 @@ public sealed class InternalUserServiceTests
                 Role = model.Role,
                 Phone = model.Phone,
                 Mobile = model.Mobile,
-                Gstin = model.Gstin,
-                BrandName = model.BrandName,
                 Remarks = model.Remarks,
                 Status = model.Status
             });
@@ -307,8 +297,6 @@ public sealed class InternalUserServiceTests
                 Role = model.Role,
                 Phone = model.Phone,
                 Mobile = model.Mobile,
-                Gstin = model.Gstin,
-                BrandName = model.BrandName,
                 Remarks = model.Remarks,
                 Status = model.Status
             });

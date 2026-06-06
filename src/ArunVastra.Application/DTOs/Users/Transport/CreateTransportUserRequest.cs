@@ -1,6 +1,6 @@
-namespace ArunVastra.Application.DTOs.Users.Internal;
+namespace ArunVastra.Application.DTOs.Users.Transport;
 
-public sealed class CreateInternalUserRequest
+public sealed class CreateTransportUserRequest
 {
     public string Name { get; set; } = string.Empty;
 
@@ -10,11 +10,19 @@ public sealed class CreateInternalUserRequest
 
     public string ConfirmPassword { get; set; } = string.Empty;
 
-    public int Role { get; set; } = 6;
-
     public string? Phone { get; set; }
 
     public string? Mobile { get; set; }
+
+    public string? Gstin { get; set; }
+
+    public string? BrandName { get; set; }
+
+    public string? Address { get; set; }
+
+    public int? StateId { get; set; }
+
+    public int? CityId { get; set; }
 
     public string? Remarks { get; set; }
 

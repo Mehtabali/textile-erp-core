@@ -63,8 +63,6 @@ public sealed class InternalUserService : IInternalUserService
                 Role = request.Role,
                 Phone = NormalizeOptional(request.Phone),
                 Mobile = NormalizeOptional(request.Mobile),
-                Gstin = NormalizeOptional(request.Gstin),
-                BrandName = NormalizeOptional(request.BrandName),
                 Remarks = NormalizeOptional(request.Remarks),
                 Status = request.Status
             },
@@ -94,8 +92,6 @@ public sealed class InternalUserService : IInternalUserService
                 Role = request.Role,
                 Phone = NormalizeOptional(request.Phone),
                 Mobile = NormalizeOptional(request.Mobile),
-                Gstin = NormalizeOptional(request.Gstin),
-                BrandName = NormalizeOptional(request.BrandName),
                 Remarks = NormalizeOptional(request.Remarks),
                 Status = request.Status
             },
@@ -139,7 +135,9 @@ public sealed class InternalUserService : IInternalUserService
 
     private static void ValidateRole(int role)
     {
-        if (role != (int)UserRole.Admin && role != (int)UserRole.FloorManager)
+        if (role != (int)UserRole.Admin &&
+            role != (int)UserRole.FloorManager &&
+            role != (int)UserRole.Accounts)
         {
             throw new InvalidOperationException("Internal user type is invalid.");
         }

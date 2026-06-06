@@ -12,10 +12,6 @@ public sealed class InternalUserUpdateModel
 
     public string? Mobile { get; set; }
 
-    public string? Gstin { get; set; }
-
-    public string? BrandName { get; set; }
-
     public string? Remarks { get; set; }
 
     public bool Status { get; set; } = true;

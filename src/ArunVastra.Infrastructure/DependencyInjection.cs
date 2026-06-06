@@ -20,8 +20,16 @@ public static class DependencyInjection
 
         services.AddScoped<IAuthService, AuthService>();
         services.AddScoped<IInternalUserService, InternalUserService>();
+        services.AddScoped<IAgencyUserService, AgencyUserService>();
+        services.AddScoped<ITransportUserService, TransportUserService>();
+        services.AddScoped<IStateService, StateService>();
+        services.AddScoped<ICityService, CityService>();
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<IInternalUserRepository, InternalUserRepository>();
+        services.AddScoped<IAgencyUserRepository, AgencyUserRepository>();
+        services.AddScoped<ITransportUserRepository, TransportUserRepository>();
+        services.AddScoped<IStateRepository, StateRepository>();
+        services.AddScoped<ICityRepository, CityRepository>();
         services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
         services.AddScoped<IPasswordService, PasswordService>();
         services.AddScoped<IJwtTokenService, JwtTokenService>();

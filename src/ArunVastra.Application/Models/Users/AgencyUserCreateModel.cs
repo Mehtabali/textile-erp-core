@@ -1,6 +1,6 @@
 namespace ArunVastra.Application.Models.Users;
 
-public sealed class InternalUserCreateModel
+public sealed class AgencyUserCreateModel
 {
     public string Name { get; set; } = string.Empty;
 
@@ -8,11 +8,17 @@ public sealed class InternalUserCreateModel
 
     public string PasswordHash { get; set; } = string.Empty;
 
-    public int Role { get; set; }
-
     public string? Phone { get; set; }
 
     public string? Mobile { get; set; }
+
+    public string? Gstin { get; set; }
+
+    public string? BrandName { get; set; }
+
+    public string? Address { get; set; }
+
+    public int? CityId { get; set; }
 
     public string? Remarks { get; set; }
 
