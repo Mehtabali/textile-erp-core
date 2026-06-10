@@ -24,12 +24,14 @@ public static class DependencyInjection
         services.AddScoped<ITransportUserService, TransportUserService>();
         services.AddScoped<IStateService, StateService>();
         services.AddScoped<ICityService, CityService>();
+        services.AddScoped<ISaleVoucherService, SaleVoucherService>();
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<IInternalUserRepository, InternalUserRepository>();
         services.AddScoped<IAgencyUserRepository, AgencyUserRepository>();
         services.AddScoped<ITransportUserRepository, TransportUserRepository>();
         services.AddScoped<IStateRepository, StateRepository>();
         services.AddScoped<ICityRepository, CityRepository>();
+        services.AddScoped<ISaleVoucherRepository, SaleVoucherRepository>();
         services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
         services.AddScoped<IPasswordService, PasswordService>();
         services.AddScoped<IJwtTokenService, JwtTokenService>();
