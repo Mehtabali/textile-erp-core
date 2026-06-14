@@ -20,17 +20,25 @@ public static class DependencyInjection
 
         services.AddScoped<IAuthService, AuthService>();
         services.AddScoped<IInternalUserService, InternalUserService>();
+        services.AddScoped<ISupplierUserService, SupplierUserService>();
         services.AddScoped<IAgencyUserService, AgencyUserService>();
         services.AddScoped<ITransportUserService, TransportUserService>();
         services.AddScoped<IStateService, StateService>();
         services.AddScoped<ICityService, CityService>();
+        services.AddScoped<ICategoryService, CategoryService>();
+        services.AddScoped<IGstRuleService, GstRuleService>();
+        services.AddScoped<IAdditionalChargeService, AdditionalChargeService>();
         services.AddScoped<ISaleVoucherService, SaleVoucherService>();
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<IInternalUserRepository, InternalUserRepository>();
+        services.AddScoped<ISupplierUserRepository, SupplierUserRepository>();
         services.AddScoped<IAgencyUserRepository, AgencyUserRepository>();
         services.AddScoped<ITransportUserRepository, TransportUserRepository>();
         services.AddScoped<IStateRepository, StateRepository>();
         services.AddScoped<ICityRepository, CityRepository>();
+        services.AddScoped<ICategoryRepository, CategoryRepository>();
+        services.AddScoped<IGstRuleRepository, GstRuleRepository>();
+        services.AddScoped<IAdditionalChargeRepository, AdditionalChargeRepository>();
         services.AddScoped<ISaleVoucherRepository, SaleVoucherRepository>();
         services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
         services.AddScoped<IPasswordService, PasswordService>();

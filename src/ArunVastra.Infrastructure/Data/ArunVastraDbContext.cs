@@ -14,6 +14,8 @@ public partial class ArunVastraDbContext : DbContext
 
     public virtual DbSet<User> Users { get; set; }
 
+    public virtual DbSet<UserView> UserViews { get; set; }
+
     public virtual DbSet<UserRefreshToken> UserRefreshTokens { get; set; }
 
     public virtual DbSet<State> States { get; set; }
@@ -27,6 +29,10 @@ public partial class ArunVastraDbContext : DbContext
     public virtual DbSet<SupItem> SupItems { get; set; }
 
     public virtual DbSet<Product> Products { get; set; }
+
+    public virtual DbSet<GstRule> GstRules { get; set; }
+
+    public virtual DbSet<AdditionalCharge> AdditionalCharges { get; set; }
 
     public virtual DbSet<SaleVoucher> SaleVouchers { get; set; }
 
@@ -146,6 +152,62 @@ public partial class ArunVastraDbContext : DbContext
                 .HasColumnName("USERCODE");
         });
 
+        modelBuilder.Entity<UserView>(entity =>
+        {
+            entity.HasNoKey();
+            entity.ToView("USERVIEW");
+
+            entity.Property(e => e.Userid).HasColumnName("USERID");
+            entity.Property(e => e.Usercode)
+                .HasMaxLength(5)
+                .IsUnicode(false)
+                .HasColumnName("USERCODE");
+            entity.Property(e => e.Firstname)
+                .HasMaxLength(100)
+                .IsUnicode(false)
+                .HasColumnName("FIRSTNAME");
+            entity.Property(e => e.Lastname)
+                .HasMaxLength(100)
+                .IsUnicode(false)
+                .HasColumnName("LASTNAME");
+            entity.Property(e => e.Email)
+                .HasMaxLength(100)
+                .IsUnicode(false)
+                .HasColumnName("EMAIL");
+            entity.Property(e => e.Phone)
+                .HasMaxLength(15)
+                .IsUnicode(false)
+                .HasColumnName("PHONE");
+            entity.Property(e => e.Mobile)
+                .HasMaxLength(15)
+                .IsUnicode(false)
+                .HasColumnName("MOBILE");
+            entity.Property(e => e.Pwhash)
+                .HasMaxLength(500)
+                .IsUnicode(false)
+                .HasColumnName("PWHASH");
+            entity.Property(e => e.Role).HasColumnName("ROLE");
+            entity.Property(e => e.Profit).HasColumnName("PROFIT");
+            entity.Property(e => e.Locked).HasColumnName("LOCKED");
+            entity.Property(e => e.Gstin)
+                .HasMaxLength(15)
+                .IsUnicode(false)
+                .HasColumnName("GSTIN");
+            entity.Property(e => e.Brandname)
+                .HasMaxLength(100)
+                .IsUnicode(false)
+                .HasColumnName("BRANDNAME");
+            entity.Property(e => e.Agentname)
+                .HasMaxLength(200)
+                .IsUnicode(false)
+                .HasColumnName("AGENTNAME");
+            entity.Property(e => e.Cityname)
+                .HasMaxLength(50)
+                .IsUnicode(false)
+                .HasColumnName("CITYNAME");
+            entity.Property(e => e.Lastaccess).HasColumnName("LASTACCESS");
+        });
+
         modelBuilder.Entity<UserRefreshToken>(entity =>
         {
             entity.ToTable("USER_REFRESH_TOKENS");
@@ -235,6 +297,69 @@ public partial class ArunVastraDbContext : DbContext
                 .HasMaxLength(100)
                 .IsUnicode(false)
                 .HasColumnName("PRODNAME");
+            entity.Property(e => e.Serial).HasColumnName("Serial");
+            entity.Property(e => e.Isactive).HasColumnName("ISACTIVE");
+            entity.Property(e => e.Gstper)
+                .HasColumnType("decimal(18, 2)")
+                .HasColumnName("GSTPER");
+            entity.Property(e => e.Hsncode)
+                .HasMaxLength(25)
+                .IsUnicode(false)
+                .HasColumnName("HSNCODE");
+            entity.Property(e => e.Stitch)
+                .HasColumnType("decimal(18, 2)")
+                .HasColumnName("STITCH");
+            entity.Property(e => e.Gstpernew)
+                .HasColumnType("decimal(18, 2)")
+                .HasColumnName("GSTPERNEW");
+        });
+
+        modelBuilder.Entity<GstRule>(entity =>
+        {
+            entity.ToTable("GSTRULES");
+
+            entity.HasKey(e => e.Id);
+
+            entity.Property(e => e.Id).HasColumnName("Id");
+            entity.Property(e => e.Productid).HasColumnName("ProductId");
+            entity.Property(e => e.Gstvalue)
+                .HasColumnType("decimal(18, 2)")
+                .HasColumnName("GstValue");
+            entity.Property(e => e.Startrange)
+                .HasColumnType("decimal(18, 2)")
+                .HasColumnName("StartRange");
+            entity.Property(e => e.Endrange)
+                .HasColumnType("decimal(18, 2)")
+                .HasColumnName("EndRange");
+
+            entity.HasOne(d => d.Product).WithMany()
+                .HasForeignKey(d => d.Productid)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_GSTRULES_PRODUCTS");
+        });
+
+        modelBuilder.Entity<AdditionalCharge>(entity =>
+        {
+            entity.ToTable("ADDITIONALCHARGES");
+
+            entity.HasKey(e => e.Id);
+
+            entity.Property(e => e.Id).HasColumnName("Id");
+            entity.Property(e => e.Productid).HasColumnName("ProductId");
+            entity.Property(e => e.Gstvalue)
+                .HasColumnType("decimal(18, 2)")
+                .HasColumnName("GstValue");
+            entity.Property(e => e.Startrange)
+                .HasColumnType("decimal(18, 2)")
+                .HasColumnName("StartRange");
+            entity.Property(e => e.Endrange)
+                .HasColumnType("decimal(18, 2)")
+                .HasColumnName("EndRange");
+
+            entity.HasOne(d => d.Product).WithMany()
+                .HasForeignKey(d => d.Productid)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_ADDITIONALCHARGES_PRODUCTS");
         });
 
         modelBuilder.Entity<SupItem>(entity =>
