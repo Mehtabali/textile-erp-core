@@ -198,7 +198,7 @@ public sealed class SaleVoucherServiceTests
             new CurrentUserContext
             {
                 UserId = 11,
-                Role = (int)UserRole.Internal
+                Role = (int)UserRole.Admin
             });
 
         Assert.True(deleted);

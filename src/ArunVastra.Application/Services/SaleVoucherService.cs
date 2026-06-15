@@ -335,7 +335,7 @@ public sealed class SaleVoucherService(ISaleVoucherRepository saleVoucherReposit
 
     private static bool CanDelete(CurrentUserContext currentUser)
     {
-        return currentUser.Role is (int)UserRole.Internal or (int)UserRole.Admin;
+        return currentUser.Role == (int)UserRole.Admin;
     }
 
     private static void NormalizePaging(SaleVoucherListRequest request)

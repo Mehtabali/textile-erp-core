@@ -21,7 +21,7 @@ public sealed class InternalUserServiceTests
             Email = "  TEST@Example.COM ",
             Password = "321",
             ConfirmPassword = "321",
-            Role = 5,
+            Role = 0,
             Phone = " 011 ",
             Mobile = " 9999999999 ",
             Remarks = " Buyer desk ",
@@ -32,13 +32,13 @@ public sealed class InternalUserServiceTests
         Assert.Equal("AVB Internal", response.Name);
         Assert.Equal("test@example.com", response.Email);
         Assert.Equal("hash:321", repository.CreatedModel?.PasswordHash);
-        Assert.Equal(5, repository.CreatedModel?.Role);
+        Assert.Equal(0, repository.CreatedModel?.Role);
         Assert.Equal("011", repository.CreatedModel?.Phone);
         Assert.Equal("9999999999", repository.CreatedModel?.Mobile);
         Assert.Equal("Buyer desk", repository.CreatedModel?.Remarks);
         Assert.False(repository.CreatedModel?.Status);
         Assert.Equal("test@example.com", passwordService.LastUser?.Email);
-        Assert.Equal("5", passwordService.LastUser?.Role);
+        Assert.Equal("0", passwordService.LastUser?.Role);
     }
 
     [Fact]
@@ -151,7 +151,7 @@ public sealed class InternalUserServiceTests
                 Email = "test@example.com",
                 Password = "321",
                 ConfirmPassword = "321",
-                Role = 0
+                Role = 5
             }));
 
         Assert.Equal("Internal user type is invalid.", ex.Message);
