@@ -53,11 +53,16 @@ jobs:
             ${{ runner.os }}-nuget-
 
       - name: Build with dotnet
-        run: dotnet build --configuration Release
-
+        run: dotnet build ./src/ArunVastra.Api/ArunVastra.Api.csproj -c Release
+        
       - name: dotnet publish
         run: dotnet publish src/ArunVastra.Api/ArunVastra.Api.csproj -c Release -o ./publish
 
+      - name: Verify publish output
+        run: |
+          echo "Published files:"
+          ls -la ./publish
+    
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
         with:
