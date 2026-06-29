@@ -7,4 +7,8 @@ public interface ISupplierUserRepository
     Task<SupplierUserListResponse> ListAsync(
         SupplierUserListRequest request,
         CancellationToken cancellationToken = default);
+
+    Task<SupplierUserAutocompleteResponse> GetAutocompleteValuesAsync(
+        SupplierUserAutocompleteRequest request,
+        CancellationToken cancellationToken = default);
 }

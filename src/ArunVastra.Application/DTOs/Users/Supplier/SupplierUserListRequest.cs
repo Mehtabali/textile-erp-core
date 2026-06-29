@@ -59,3 +59,19 @@ public sealed class SupplierUserListResponse
 
     public int PageSize { get; set; }
 }
+
+public sealed class SupplierUserAutocompleteRequest
+{
+    public string? Field { get; set; }
+
+    public string? SearchKeyword { get; set; }
+
+    public int MaxResults { get; set; } = 10;
+
+    public bool IncludeLocked { get; set; } = true;
+}
+
+public sealed class SupplierUserAutocompleteResponse
+{
+    public IReadOnlyList<string> Values { get; set; } = [];
+}

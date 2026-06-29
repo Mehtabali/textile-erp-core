@@ -50,6 +50,46 @@ public sealed class SupplierUserRepository : ISupplierUserRepository
         };
     }
 
+    public async Task<SupplierUserAutocompleteResponse> GetAutocompleteValuesAsync(
+        SupplierUserAutocompleteRequest request,
+        CancellationToken cancellationToken = default)
+    {
+        var query = _dbContext.UserViews
+            .AsNoTracking()
+            .Where(user => user.Role == (int)UserRole.Supplier);
+
+        if (!request.IncludeLocked)
+        {
+            query = query.Where(user => !user.Locked);
+        }
+
+        var search = NormalizeFilter(request.SearchKeyword);
+        var valuesQuery = NormalizeSortField(request.Field) switch
+        {
+            "agent" => query
+                .Where(user => user.Agentname != null && (search == null || user.Agentname.StartsWith(search)))
+                .Select(user => user.Agentname!),
+            "city" => query
+                .Where(user => user.Cityname != null && (search == null || user.Cityname.StartsWith(search)))
+                .Select(user => user.Cityname!),
+            _ => query
+                .Where(user => search == null || user.Firstname.StartsWith(search))
+                .Select(user => user.Firstname)
+        };
+
+        var values = await valuesQuery
+            .Where(value => value != string.Empty)
+            .Distinct()
+            .OrderBy(value => value)
+            .Take(request.MaxResults)
+            .ToListAsync(cancellationToken);
+
+        return new SupplierUserAutocompleteResponse
+        {
+            Values = values
+        };
+    }
+
     private static IQueryable<UserView> ApplySearch(IQueryable<UserView> query, string? searchKeyword)
     {
         if (NormalizeFilter(searchKeyword) is not { } search)

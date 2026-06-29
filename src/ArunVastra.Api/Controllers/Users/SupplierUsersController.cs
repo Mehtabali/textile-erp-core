@@ -39,4 +39,32 @@ public sealed class SupplierUsersController(ISupplierUserService supplierUserSer
 
         return Ok(users);
     }
+
+    [HttpPost("autocomplete")]
+    [Consumes("application/json")]
+    [SwaggerOperation(
+        Summary = "Get supplier autocomplete values",
+        Description = "Returns distinct supplier values for supported columns from dbo.USERVIEW where ROLE = 1.")]
+    [ProducesResponseType(typeof(SupplierUserAutocompleteResponse), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<ActionResult<SupplierUserAutocompleteResponse>> Autocomplete(
+        [FromBody] SupplierUserAutocompleteRequest request,
+        CancellationToken cancellationToken = default)
+    {
+        if (!IsSupportedAutocompleteField(request.Field))
+        {
+            return BadRequest(new { message = "Unsupported supplier autocomplete field." });
+        }
+
+        var values = await _supplierUserService.GetAutocompleteValuesAsync(request, cancellationToken);
+
+        return Ok(values);
+    }
+
+    private static bool IsSupportedAutocompleteField(string? field)
+    {
+        return string.Equals(field, "name", StringComparison.OrdinalIgnoreCase) ||
+            string.Equals(field, "agent", StringComparison.OrdinalIgnoreCase) ||
+            string.Equals(field, "city", StringComparison.OrdinalIgnoreCase);
+    }
 }

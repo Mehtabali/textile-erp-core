@@ -22,4 +22,15 @@ public sealed class SupplierUserService : ISupplierUserService
 
         return _supplierUserRepository.ListAsync(request, cancellationToken);
     }
+
+    public Task<SupplierUserAutocompleteResponse> GetAutocompleteValuesAsync(
+        SupplierUserAutocompleteRequest request,
+        CancellationToken cancellationToken = default)
+    {
+        request.Field = request.Field?.Trim().ToLowerInvariant();
+        request.SearchKeyword = string.IsNullOrWhiteSpace(request.SearchKeyword) ? null : request.SearchKeyword.Trim();
+        request.MaxResults = Math.Clamp(request.MaxResults, 1, 50);
+
+        return _supplierUserRepository.GetAutocompleteValuesAsync(request, cancellationToken);
+    }
 }
