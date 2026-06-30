@@ -67,13 +67,13 @@ public sealed class SupplierUserRepository : ISupplierUserRepository
         var valuesQuery = NormalizeSortField(request.Field) switch
         {
             "agent" => query
-                .Where(user => user.Agentname != null && (search == null || user.Agentname.StartsWith(search)))
+                .Where(user => user.Agentname != null && (search == null || user.Agentname.Contains(search)))
                 .Select(user => user.Agentname!),
             "city" => query
-                .Where(user => user.Cityname != null && (search == null || user.Cityname.StartsWith(search)))
+                .Where(user => user.Cityname != null && (search == null || user.Cityname.Contains(search)))
                 .Select(user => user.Cityname!),
             _ => query
-                .Where(user => search == null || user.Firstname.StartsWith(search))
+                .Where(user => search == null || user.Firstname.Contains(search))
                 .Select(user => user.Firstname)
         };
 
