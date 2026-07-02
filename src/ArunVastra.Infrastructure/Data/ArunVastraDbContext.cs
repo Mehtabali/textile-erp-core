@@ -38,6 +38,10 @@ public partial class ArunVastraDbContext : DbContext
 
     public virtual DbSet<SaleVoucherDetail> SaleVoucherDetails { get; set; }
 
+    public virtual DbSet<SupplierTransportMapping> SupplierTransportMappings { get; set; }
+
+    public virtual DbSet<SupplierCategoryMapping> SupplierCategoryMappings { get; set; }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<State>(entity =>
@@ -459,6 +463,50 @@ public partial class ArunVastraDbContext : DbContext
 
             entity.HasOne(d => d.SupplierProduct).WithMany()
                 .HasForeignKey(d => d.Supprodid);
+        });
+
+        modelBuilder.Entity<SupplierTransportMapping>(entity =>
+        {
+            entity.ToTable("SUPPLIERTRANSPORTMAPPING");
+
+            entity.HasKey(e => e.Id);
+
+            entity.HasIndex(e => new { e.Supplieruserid, e.Transportid }, "UX_SUPPLIERTRANSPORTMAPPING_SUPPLIERUSERID_TRANSPORTID")
+                .IsUnique();
+
+            entity.HasIndex(e => e.Transportid, "IX_SUPPLIERTRANSPORTMAPPING_TRANSPORTID");
+
+            entity.Property(e => e.Id).HasColumnName("ID");
+            entity.Property(e => e.Supplieruserid).HasColumnName("SUPPLIERUSERID");
+            entity.Property(e => e.Transportid).HasColumnName("TRANSPORTID");
+
+            entity.HasOne(d => d.Supplier).WithMany()
+                .HasForeignKey(d => d.Supplieruserid)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_SUPPLIERTRANSPORTMAPPING_SUPPLIER_USERS");
+
+            entity.HasOne(d => d.Transport).WithMany()
+                .HasForeignKey(d => d.Transportid)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK_SUPPLIERTRANSPORTMAPPING_TRANSPORT_USERS");
+        });
+
+        modelBuilder.Entity<SupplierCategoryMapping>(entity =>
+        {
+            entity.ToTable("SUPPRODUCTS");
+
+            entity.HasKey(e => new { e.Userid, e.Prodid });
+
+            entity.Property(e => e.Userid).HasColumnName("USERID");
+            entity.Property(e => e.Prodid).HasColumnName("PRODID");
+
+            entity.HasOne(d => d.Supplier).WithMany()
+                .HasForeignKey(d => d.Userid)
+                .OnDelete(DeleteBehavior.ClientSetNull);
+
+            entity.HasOne(d => d.ProductCategory).WithMany()
+                .HasForeignKey(d => d.Prodid)
+                .OnDelete(DeleteBehavior.ClientSetNull);
         });
 
         OnModelCreatingPartial(modelBuilder);

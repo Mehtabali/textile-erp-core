@@ -29,6 +29,8 @@ public static class DependencyInjection
         services.AddScoped<IGstRuleService, GstRuleService>();
         services.AddScoped<IAdditionalChargeService, AdditionalChargeService>();
         services.AddScoped<ISaleVoucherService, SaleVoucherService>();
+        services.AddScoped<ISupplierTransportMappingService, SupplierTransportMappingService>();
+        services.AddScoped<ISupplierCategoryMappingService, SupplierCategoryMappingService>();
         services.AddScoped<IUserRepository, UserRepository>();
         services.AddScoped<IInternalUserRepository, InternalUserRepository>();
         services.AddScoped<ISupplierUserRepository, SupplierUserRepository>();
@@ -40,6 +42,8 @@ public static class DependencyInjection
         services.AddScoped<IGstRuleRepository, GstRuleRepository>();
         services.AddScoped<IAdditionalChargeRepository, AdditionalChargeRepository>();
         services.AddScoped<ISaleVoucherRepository, SaleVoucherRepository>();
+        services.AddScoped<ISupplierTransportMappingRepository, SupplierTransportMappingRepository>();
+        services.AddScoped<ISupplierCategoryMappingRepository, SupplierCategoryMappingRepository>();
         services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
         services.AddScoped<IPasswordService, PasswordService>();
         services.AddScoped<IJwtTokenService, JwtTokenService>();
