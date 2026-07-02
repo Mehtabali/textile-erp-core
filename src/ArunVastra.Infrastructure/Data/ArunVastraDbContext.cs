@@ -28,6 +28,8 @@ public partial class ArunVastraDbContext : DbContext
 
     public virtual DbSet<SupItem> SupItems { get; set; }
 
+    public virtual DbSet<SupItemView> SupItemViews { get; set; }
+
     public virtual DbSet<Product> Products { get; set; }
 
     public virtual DbSet<GstRule> GstRules { get; set; }
@@ -403,6 +405,50 @@ public partial class ArunVastraDbContext : DbContext
             entity.HasOne(d => d.Product).WithMany()
                 .HasForeignKey(d => d.Prodid)
                 .OnDelete(DeleteBehavior.ClientSetNull);
+        });
+
+        modelBuilder.Entity<SupItemView>(entity =>
+        {
+            entity.HasNoKey();
+            entity.ToView("SUPITEMVIEW");
+
+            entity.Property(e => e.Supprodid).HasColumnName("SUPPRODID");
+            entity.Property(e => e.Prodid).HasColumnName("PRODID");
+            entity.Property(e => e.Prodname)
+                .HasMaxLength(100)
+                .IsUnicode(false)
+                .HasColumnName("PRODNAME");
+            entity.Property(e => e.Userid).HasColumnName("USERID");
+            entity.Property(e => e.Firstname)
+                .HasMaxLength(100)
+                .IsUnicode(false)
+                .HasColumnName("FIRSTNAME");
+            entity.Property(e => e.Compid).HasColumnName("COMPID");
+            entity.Property(e => e.Compname)
+                .HasMaxLength(100)
+                .IsUnicode(false)
+                .HasColumnName("COMPNAME");
+            entity.Property(e => e.Barcode)
+                .HasMaxLength(100)
+                .IsUnicode(false)
+                .HasColumnName("BARCODE");
+            entity.Property(e => e.Description)
+                .HasMaxLength(255)
+                .IsUnicode(false)
+                .HasColumnName("DESCRIPTION");
+            entity.Property(e => e.Formula).HasColumnName("FORMULA");
+            entity.Property(e => e.Purchase)
+                .HasColumnType("decimal(18, 2)")
+                .HasColumnName("PURCHASE");
+            entity.Property(e => e.Mrp).HasColumnName("MRP");
+            entity.Property(e => e.Mrpnew)
+                .HasColumnType("decimal(18, 2)")
+                .HasColumnName("MRPNEW");
+            entity.Property(e => e.Isactive).HasColumnName("ISACTIVE");
+            entity.Property(e => e.Hsncode)
+                .HasMaxLength(25)
+                .IsUnicode(false)
+                .HasColumnName("HSNCODE");
         });
 
         modelBuilder.Entity<SaleVoucher>(entity =>
