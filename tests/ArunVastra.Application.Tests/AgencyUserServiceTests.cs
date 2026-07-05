@@ -19,44 +19,22 @@ public sealed class AgencyUserServiceTests
         {
             Name = "  AVB Agency  ",
             Email = "  AGENCY@Example.COM ",
-            Password = "321",
-            ConfirmPassword = "321",
             Phone = " 011 ",
             Mobile = " 9999999999 ",
-            Remarks = " Agency desk ",
-            Status = false
+            Remarks = " Agency desk "
         });
 
         Assert.Equal(1, response.UserId);
         Assert.Equal("AVB Agency", response.Name);
         Assert.Equal("agency@example.com", response.Email);
-        Assert.Equal("hash:321", repository.CreatedModel?.PasswordHash);
+        Assert.Equal("hash:Agency@123", repository.CreatedModel?.PasswordHash);
+        Assert.Equal("Agency@123", repository.CreatedModel?.LegacyPassword);
         Assert.Equal("011", repository.CreatedModel?.Phone);
         Assert.Equal("9999999999", repository.CreatedModel?.Mobile);
         Assert.Equal("Agency desk", repository.CreatedModel?.Remarks);
         Assert.False(repository.CreatedModel?.Status);
         Assert.Equal("agency@example.com", passwordService.LastUser?.Email);
         Assert.Equal("4", passwordService.LastUser?.Role);
-    }
-
-    [Fact]
-    public async Task CreateAsync_WhenConfirmPasswordDoesNotMatch_Throws()
-    {
-        var service = new AgencyUserService(
-            new FakeAgencyUserRepository(),
-            new FakePasswordService(),
-            new FakeCityRepository());
-
-        var ex = await Assert.ThrowsAsync<InvalidOperationException>(() =>
-            service.CreateAsync(new CreateAgencyUserRequest
-            {
-                Name = "AVB Agency",
-                Email = "agency@example.com",
-                Password = "321",
-                ConfirmPassword = "123"
-            }));
-
-        Assert.Equal("Password and confirm password do not match.", ex.Message);
     }
 
     [Fact]
@@ -72,9 +50,7 @@ public sealed class AgencyUserServiceTests
             service.CreateAsync(new CreateAgencyUserRequest
             {
                 Name = "AVB Agency",
-                Email = "agency@example.com",
-                Password = "321",
-                ConfirmPassword = "321"
+                Email = "agency@example.com"
             }));
 
         Assert.Equal("Email already exists.", ex.Message);
@@ -95,8 +71,7 @@ public sealed class AgencyUserServiceTests
                 Email = " UPDATED@Example.COM ",
                 Phone = " 123 ",
                 Mobile = " 456 ",
-                Remarks = " Notes ",
-                Status = false
+                Remarks = " Notes "
             });
 
         Assert.NotNull(response);
@@ -186,8 +161,6 @@ public sealed class AgencyUserServiceTests
             {
                 Name = "AVB Agency",
                 Email = "agency@example.com",
-                Password = "321",
-                ConfirmPassword = "321",
                 CityId = 11
             }));
 
@@ -207,8 +180,6 @@ public sealed class AgencyUserServiceTests
             {
                 Name = "AVB Agency",
                 Email = "agency@example.com",
-                Password = "321",
-                ConfirmPassword = "321",
                 StateId = 9,
                 CityId = 11
             }));

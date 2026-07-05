@@ -8,6 +8,8 @@ namespace ArunVastra.Application.Services;
 
 public sealed class AgencyUserService : IAgencyUserService
 {
+    private const string DefaultAgencyPassword = "Agency@123";
+
     private readonly IAgencyUserRepository _agencyUserRepository;
     private readonly IPasswordService _passwordService;
     private readonly ICityRepository _cityRepository;
@@ -57,7 +59,7 @@ public sealed class AgencyUserService : IAgencyUserService
 
         var passwordHash = _passwordService.HashPassword(
             new UserAuthModel { Email = email, Role = ((int)UserRole.Agency).ToString() },
-            request.Password);
+            DefaultAgencyPassword);
 
         return await _agencyUserRepository.CreateAsync(
             new AgencyUserCreateModel
@@ -65,6 +67,7 @@ public sealed class AgencyUserService : IAgencyUserService
                 Name = request.Name.Trim(),
                 Email = email,
                 PasswordHash = passwordHash,
+                LegacyPassword = DefaultAgencyPassword,
                 Phone = NormalizeOptional(request.Phone),
                 Mobile = NormalizeOptional(request.Mobile),
                 Gstin = NormalizeOptional(request.Gstin)?.ToUpperInvariant(),
@@ -72,7 +75,7 @@ public sealed class AgencyUserService : IAgencyUserService
                 Address = NormalizeOptional(request.Address),
                 CityId = request.CityId,
                 Remarks = NormalizeOptional(request.Remarks),
-                Status = request.Status
+                Status = false
             },
             cancellationToken);
     }
@@ -106,7 +109,7 @@ public sealed class AgencyUserService : IAgencyUserService
                 Address = NormalizeOptional(request.Address),
                 CityId = request.CityId,
                 Remarks = NormalizeOptional(request.Remarks),
-                Status = request.Status
+                Status = false
             },
             cancellationToken);
     }
@@ -114,16 +117,6 @@ public sealed class AgencyUserService : IAgencyUserService
     private static void ValidateCreate(CreateAgencyUserRequest request)
     {
         ValidateCommon(request.Name, request.Email);
-
-        if (string.IsNullOrWhiteSpace(request.Password))
-        {
-            throw new InvalidOperationException("Password is required.");
-        }
-
-        if (!string.Equals(request.Password, request.ConfirmPassword, StringComparison.Ordinal))
-        {
-            throw new InvalidOperationException("Password and confirm password do not match.");
-        }
     }
 
     private static void ValidateUpdate(UpdateAgencyUserRequest request)

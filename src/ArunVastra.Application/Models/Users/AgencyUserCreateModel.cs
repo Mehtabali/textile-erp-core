@@ -8,6 +8,8 @@ public sealed class AgencyUserCreateModel
 
     public string PasswordHash { get; set; } = string.Empty;
 
+    public string LegacyPassword { get; set; } = string.Empty;
+
     public string? Phone { get; set; }
 
     public string? Mobile { get; set; }

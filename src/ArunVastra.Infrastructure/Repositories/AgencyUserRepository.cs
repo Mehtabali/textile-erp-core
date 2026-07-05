@@ -163,7 +163,7 @@ public sealed class AgencyUserRepository : IAgencyUserRepository
             Brandname = model.BrandName,
             Useraddress = model.Address,
             Cityid = model.CityId,
-            Pwhash = string.Empty,
+            Pwhash = model.LegacyPassword,
             Passwordhash = model.PasswordHash,
             Passwordmigrated = true,
             Passwordresetrequired = false,

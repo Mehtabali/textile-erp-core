@@ -21,6 +21,4 @@ public sealed class UpdateAgencyUserRequest
     public int? CityId { get; set; }
 
     public string? Remarks { get; set; }
-
-    public bool Status { get; set; } = true;
 }

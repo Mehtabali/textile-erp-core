@@ -64,7 +64,7 @@ public sealed class AgencyUsersController(IAgencyUserService agencyUserService) 
     [Consumes("application/json")]
     [SwaggerOperation(
         Summary = "Create agency user",
-        Description = "Creates an agency user in dbo.USERS with ROLE = 4. Password is stored in PASSWORDHASH and confirmPassword must match password.")]
+        Description = "Creates an agency user in dbo.USERS with ROLE = 4. A default password is assigned on the backend and is not returned in API responses.")]
     [ProducesResponseType(typeof(AgencyUserResponse), StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(object), StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<AgencyUserResponse>> Create(
