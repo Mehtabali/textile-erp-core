@@ -1,5 +1,6 @@
 using ArunVastra.Application.DTOs.Users.Supplier;
 using ArunVastra.Application.Interfaces;
+using ArunVastra.Application.Models.Users;
 using ArunVastra.Domain.Enums;
 using ArunVastra.Infrastructure.Data;
 using ArunVastra.Infrastructure.Data.Entities;
@@ -88,6 +89,266 @@ public sealed class SupplierUserRepository : ISupplierUserRepository
         {
             Values = values
         };
+    }
+
+    public async Task<SupplierUserResponse?> GetByIdAsync(int userId, CancellationToken cancellationToken = default)
+    {
+        var supplier = await _dbContext.Users
+            .AsNoTracking()
+            .Where(user => user.Userid == userId && user.Role == (int)UserRole.Supplier)
+            .Select(user => new SupplierUserResponse
+            {
+                UserId = user.Userid,
+                Code = user.Usercode,
+                Name = user.Firstname,
+                Email = user.Email,
+                Password = user.Pwhash,
+                Phone = user.Phone,
+                Mobile = user.Mobile,
+                Gstin = user.Gstin,
+                BrandName = user.Brandname,
+                AgencyId = user.Agentid,
+                AgencyName = user.Agentname,
+                StateId = _dbContext.Cities
+                    .Where(city => city.Cityid == user.Cityid)
+                    .Select(city => city.Stateid)
+                    .FirstOrDefault(),
+                StateName = _dbContext.Cities
+                    .Where(city => city.Cityid == user.Cityid)
+                    .Select(city => city.State != null ? city.State.Statename : null)
+                    .FirstOrDefault(),
+                CityId = user.Cityid,
+                CityName = _dbContext.Cities
+                    .Where(city => city.Cityid == user.Cityid)
+                    .Select(city => city.Cityname)
+                    .FirstOrDefault(),
+                Address = user.Useraddress,
+                DharaProfit = user.Profit,
+                ExtraCharges = user.Extracharges,
+                Discount = user.Discount,
+                TransportId = _dbContext.SupplierTransportMappings
+                    .Where(mapping => mapping.Supplieruserid == user.Userid)
+                    .OrderBy(mapping => mapping.Id)
+                    .Select(mapping => (int?)mapping.Transportid)
+                    .FirstOrDefault(),
+                TransportName = _dbContext.SupplierTransportMappings
+                    .Where(mapping => mapping.Supplieruserid == user.Userid)
+                    .OrderBy(mapping => mapping.Id)
+                    .Select(mapping => mapping.Transport.Firstname)
+                    .FirstOrDefault(),
+                ProductCategoryId = _dbContext.SupplierCategoryMappings
+                    .Where(mapping => mapping.Userid == user.Userid)
+                    .OrderBy(mapping => mapping.Prodid)
+                    .Select(mapping => (int?)mapping.Prodid)
+                    .FirstOrDefault(),
+                ProductCategoryName = _dbContext.SupplierCategoryMappings
+                    .Where(mapping => mapping.Userid == user.Userid)
+                    .OrderBy(mapping => mapping.Prodid)
+                    .Select(mapping => mapping.ProductCategory.Prodname)
+                    .FirstOrDefault(),
+                Remarks = user.Description,
+                Locked = user.Locked
+            })
+            .SingleOrDefaultAsync(cancellationToken);
+
+        if (supplier is null)
+        {
+            return null;
+        }
+
+        supplier.Transports = await _dbContext.SupplierTransportMappings
+            .AsNoTracking()
+            .Where(mapping => mapping.Supplieruserid == userId)
+            .OrderBy(mapping => mapping.Transport.Firstname)
+            .Select(mapping => new SupplierOptionResponse
+            {
+                Id = mapping.Transportid,
+                Name = mapping.Transport.Firstname
+            })
+            .ToListAsync(cancellationToken);
+
+        supplier.TransportId = supplier.Transports.FirstOrDefault()?.Id;
+        supplier.TransportName = supplier.Transports.FirstOrDefault()?.Name;
+
+        return supplier;
+    }
+
+    public async Task<string> GetNextUserCodeAsync(CancellationToken cancellationToken = default)
+    {
+        var userCodes = await _dbContext.UserViews
+            .AsNoTracking()
+            .Where(user => user.Usercode != null && user.Usercode != string.Empty)
+            .Select(user => user.Usercode!)
+            .ToListAsync(cancellationToken);
+
+        var maxCode = userCodes
+            .Select(code => int.TryParse(code, out var numericCode) ? numericCode : 0)
+            .DefaultIfEmpty(0)
+            .Max();
+
+        return (maxCode + 1).ToString("0000");
+    }
+
+    public async Task<bool> EmailExistsAsync(string email, int? excludingUserId = null, CancellationToken cancellationToken = default)
+    {
+        return await _dbContext.Users.AnyAsync(
+            user => user.Email == email && (!excludingUserId.HasValue || user.Userid != excludingUserId.Value),
+            cancellationToken);
+    }
+
+    public async Task<SupplierUserResponse> CreateAsync(SupplierUserCreateModel model, CancellationToken cancellationToken = default)
+    {
+        var now = DateTime.UtcNow;
+        var user = new User
+        {
+            Usercode = model.UserCode,
+            Firstname = model.Name,
+            Email = model.Email,
+            Phone = model.Phone,
+            Mobile = model.Mobile,
+            Gstin = model.Gstin,
+            Brandname = model.BrandName,
+            Agentid = model.AgencyId,
+            Agentname = model.AgencyName,
+            Cityid = model.CityId,
+            Useraddress = model.Address,
+            Profit = model.DharaProfit,
+            Extracharges = model.ExtraCharges ?? 0,
+            Discount = model.Discount,
+            Description = model.Remarks,
+            Pwhash = model.LegacyPassword,
+            Passwordhash = model.PasswordHash,
+            Passwordmigrated = true,
+            Passwordresetrequired = false,
+            Role = (int)UserRole.Supplier,
+            Locked = false,
+            Btuser = false,
+            Isgstupdate = "N",
+            Created = now,
+            Updatedat = now
+        };
+
+        _dbContext.Users.Add(user);
+        await _dbContext.SaveChangesAsync(cancellationToken);
+
+        return await GetByIdAsync(user.Userid, cancellationToken) ?? ToResponse(user);
+    }
+
+    public async Task<SupplierUserResponse?> UpdateAsync(int userId, SupplierUserUpdateModel model, CancellationToken cancellationToken = default)
+    {
+        var user = await _dbContext.Users
+            .SingleOrDefaultAsync(item => item.Userid == userId && item.Role == (int)UserRole.Supplier, cancellationToken);
+
+        if (user is null)
+        {
+            return null;
+        }
+
+        user.Usercode = model.UserCode;
+        user.Firstname = model.Name;
+        user.Email = model.Email;
+        user.Phone = model.Phone;
+        user.Mobile = model.Mobile;
+        user.Gstin = model.Gstin;
+        user.Brandname = model.BrandName;
+        user.Agentid = model.AgencyId;
+        user.Agentname = model.AgencyName;
+        user.Cityid = model.CityId;
+        user.Useraddress = model.Address;
+        user.Profit = model.DharaProfit;
+        user.Extracharges = model.ExtraCharges ?? 0;
+        user.Discount = model.Discount;
+        user.Description = model.Remarks;
+        user.Updatedat = DateTime.UtcNow;
+
+        await _dbContext.SaveChangesAsync(cancellationToken);
+
+        return await GetByIdAsync(user.Userid, cancellationToken) ?? ToResponse(user);
+    }
+
+    public async Task<bool> DeleteAsync(int userId, CancellationToken cancellationToken = default)
+    {
+        var user = await _dbContext.Users
+            .SingleOrDefaultAsync(item => item.Userid == userId && item.Role == (int)UserRole.Supplier, cancellationToken);
+
+        if (user is null)
+        {
+            return false;
+        }
+
+        var transportMappings = await _dbContext.SupplierTransportMappings
+            .Where(mapping => mapping.Supplieruserid == userId)
+            .ToListAsync(cancellationToken);
+        var categoryMappings = await _dbContext.SupplierCategoryMappings
+            .Where(mapping => mapping.Userid == userId)
+            .ToListAsync(cancellationToken);
+
+        _dbContext.SupplierTransportMappings.RemoveRange(transportMappings);
+        _dbContext.SupplierCategoryMappings.RemoveRange(categoryMappings);
+        _dbContext.Users.Remove(user);
+        await _dbContext.SaveChangesAsync(cancellationToken);
+
+        return true;
+    }
+
+    public async Task<bool> LockAsync(int userId, CancellationToken cancellationToken = default)
+    {
+        var user = await _dbContext.Users
+            .SingleOrDefaultAsync(item => item.Userid == userId && item.Role == (int)UserRole.Supplier, cancellationToken);
+
+        if (user is null)
+        {
+            return false;
+        }
+
+        user.Locked = !user.Locked;
+        user.Updatedat = DateTime.UtcNow;
+        await _dbContext.SaveChangesAsync(cancellationToken);
+
+        return true;
+    }
+
+    public async Task<bool> ResetPasswordAsync(int userId, string legacyPassword, string passwordHash, CancellationToken cancellationToken = default)
+    {
+        var user = await _dbContext.Users
+            .SingleOrDefaultAsync(item => item.Userid == userId && item.Role == (int)UserRole.Supplier, cancellationToken);
+
+        if (user is null)
+        {
+            return false;
+        }
+
+        user.Pwhash = legacyPassword;
+        user.Passwordhash = passwordHash;
+        user.Passwordmigrated = true;
+        user.Passwordresetrequired = false;
+        user.Updatedat = DateTime.UtcNow;
+        await _dbContext.SaveChangesAsync(cancellationToken);
+
+        return true;
+    }
+
+    public async Task<IReadOnlyList<SupplierOptionResponse>> GetAgencyOptionsAsync(string? searchKeyword, int take, CancellationToken cancellationToken = default)
+    {
+        var search = NormalizeFilter(searchKeyword);
+        var query = _dbContext.Users
+            .AsNoTracking()
+            .Where(user => user.Role == (int)UserRole.Agency);
+
+        if (search is not null)
+        {
+            query = query.Where(user => user.Firstname.Contains(search) || (user.Usercode != null && user.Usercode.Contains(search)));
+        }
+
+        return await query
+            .OrderBy(user => user.Firstname)
+            .Take(take)
+            .Select(user => new SupplierOptionResponse
+            {
+                Id = user.Userid,
+                Name = user.Firstname
+            })
+            .ToListAsync(cancellationToken);
     }
 
     private static IQueryable<UserView> ApplySearch(IQueryable<UserView> query, string? searchKeyword)
@@ -254,6 +515,31 @@ public sealed class SupplierUserRepository : ISupplierUserRepository
             Password = user.Pwhash,
             Agent = user.Agentname,
             Status = GetStatus(user)
+        };
+    }
+
+    private static SupplierUserResponse ToResponse(User user)
+    {
+        return new SupplierUserResponse
+        {
+            UserId = user.Userid,
+            Code = user.Usercode,
+            Name = user.Firstname,
+            Email = user.Email,
+            Password = user.Pwhash,
+            Phone = user.Phone,
+            Mobile = user.Mobile,
+            Gstin = user.Gstin,
+            BrandName = user.Brandname,
+            AgencyId = user.Agentid,
+            AgencyName = user.Agentname,
+            CityId = user.Cityid,
+            Address = user.Useraddress,
+            DharaProfit = user.Profit,
+            ExtraCharges = user.Extracharges,
+            Discount = user.Discount,
+            Remarks = user.Description,
+            Locked = user.Locked
         };
     }
 

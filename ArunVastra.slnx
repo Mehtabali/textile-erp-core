@@ -8,10 +8,12 @@
   <Folder Name="/tests/">
     <Project Path="tests/ArunVastra.Application.Tests/ArunVastra.Application.Tests.csproj" />
   </Folder>
+  <Folder Name="/database/" />
   <Folder Name="/database/migrations/">
     <File Path="database/migrations/001_auth_add_user_security_columns.sql" />
     <File Path="database/migrations/002_auth_create_user_refresh_tokens.sql" />
     <File Path="database/migrations/004_create_supplier_transport_mapping.sql" />
+    <File Path="database/migrations/005_users_add_discount.sql" />
     <File Path="database/migrations/GSTRules.sql" />
     <File Path="database/migrations/Products_Table_New_Columns.sql" />
   </Folder>

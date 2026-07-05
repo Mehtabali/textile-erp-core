@@ -51,6 +51,8 @@ public partial class User
 
     public decimal? Extracharges { get; set; }
 
+    public decimal? Discount { get; set; }
+
     public string? Passwordhash { get; set; }
 
     public bool Passwordmigrated { get; set; }

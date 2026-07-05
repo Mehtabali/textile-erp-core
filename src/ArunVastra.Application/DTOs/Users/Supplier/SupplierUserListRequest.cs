@@ -75,3 +75,152 @@ public sealed class SupplierUserAutocompleteResponse
 {
     public IReadOnlyList<string> Values { get; set; } = [];
 }
+
+public sealed class SupplierUserResponse
+{
+    public int UserId { get; set; }
+
+    public string? Code { get; set; }
+
+    public string Name { get; set; } = string.Empty;
+
+    public string Email { get; set; } = string.Empty;
+
+    public string? Password { get; set; }
+
+    public string? Phone { get; set; }
+
+    public string? Mobile { get; set; }
+
+    public string? Gstin { get; set; }
+
+    public string? BrandName { get; set; }
+
+    public int? AgencyId { get; set; }
+
+    public string? AgencyName { get; set; }
+
+    public int? StateId { get; set; }
+
+    public string? StateName { get; set; }
+
+    public int? CityId { get; set; }
+
+    public string? CityName { get; set; }
+
+    public string? Address { get; set; }
+
+    public int? DharaProfit { get; set; }
+
+    public decimal? ExtraCharges { get; set; }
+
+    public decimal? Discount { get; set; }
+
+    public int? TransportId { get; set; }
+
+    public string? TransportName { get; set; }
+
+    public IReadOnlyList<SupplierOptionResponse> Transports { get; set; } = [];
+
+    public int? ProductCategoryId { get; set; }
+
+    public string? ProductCategoryName { get; set; }
+
+    public string? Remarks { get; set; }
+
+    public bool Locked { get; set; }
+}
+
+public sealed class CreateSupplierUserRequest
+{
+    public string? UserCode { get; set; }
+
+    public string Name { get; set; } = string.Empty;
+
+    public string Email { get; set; } = string.Empty;
+
+    public string Password { get; set; } = string.Empty;
+
+    public string? Phone { get; set; }
+
+    public string? Mobile { get; set; }
+
+    public string? Gstin { get; set; }
+
+    public string? BrandName { get; set; }
+
+    public int? AgencyId { get; set; }
+
+    public int? StateId { get; set; }
+
+    public int? CityId { get; set; }
+
+    public string? Address { get; set; }
+
+    public int? DharaProfit { get; set; }
+
+    public decimal? ExtraCharges { get; set; }
+
+    public decimal? Discount { get; set; }
+
+    public int? TransportId { get; set; }
+
+    public IReadOnlyList<int> TransportIds { get; set; } = [];
+
+    public int? ProductCategoryId { get; set; }
+
+    public string? Remarks { get; set; }
+}
+
+public sealed class UpdateSupplierUserRequest
+{
+    public string? UserCode { get; set; }
+
+    public string Name { get; set; } = string.Empty;
+
+    public string Email { get; set; } = string.Empty;
+
+    public string? Password { get; set; }
+
+    public string? Phone { get; set; }
+
+    public string? Mobile { get; set; }
+
+    public string? Gstin { get; set; }
+
+    public string? BrandName { get; set; }
+
+    public int? AgencyId { get; set; }
+
+    public int? StateId { get; set; }
+
+    public int? CityId { get; set; }
+
+    public string? Address { get; set; }
+
+    public int? DharaProfit { get; set; }
+
+    public decimal? ExtraCharges { get; set; }
+
+    public decimal? Discount { get; set; }
+
+    public int? TransportId { get; set; }
+
+    public IReadOnlyList<int> TransportIds { get; set; } = [];
+
+    public int? ProductCategoryId { get; set; }
+
+    public string? Remarks { get; set; }
+}
+
+public sealed class ResetSupplierPasswordRequest
+{
+    public string Password { get; set; } = string.Empty;
+}
+
+public sealed class SupplierOptionResponse
+{
+    public int Id { get; set; }
+
+    public string Name { get; set; } = string.Empty;
+}

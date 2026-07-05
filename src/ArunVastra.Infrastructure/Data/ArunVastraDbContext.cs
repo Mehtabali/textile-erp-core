@@ -108,6 +108,9 @@ public partial class ArunVastraDbContext : DbContext
                 .HasDefaultValue(0m)
                 .HasColumnType("decimal(18, 2)")
                 .HasColumnName("EXTRACHARGES");
+            entity.Property(e => e.Discount)
+                .HasColumnType("decimal(18, 2)")
+                .HasColumnName("DISCOUNT");
             entity.Property(e => e.Firstname)
                 .HasMaxLength(100)
                 .IsUnicode(false)
