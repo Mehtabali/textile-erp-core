@@ -74,8 +74,13 @@ public sealed class SupplierUserRepository : ISupplierUserRepository
                 .Where(user => user.Cityname != null && (search == null || user.Cityname.Contains(search)))
                 .Select(user => user.Cityname!),
             _ => query
-                .Where(user => search == null || user.Firstname.Contains(search))
-                .Select(user => user.Firstname)
+                .Where(user =>
+                    search == null ||
+                    user.Firstname.Contains(search) ||
+                    (user.Usercode != null && user.Usercode.Contains(search)))
+                .Select(user => user.Usercode == null || user.Usercode == string.Empty
+                    ? user.Firstname
+                    : user.Firstname + " (" + user.Usercode + ")")
         };
 
         var values = await valuesQuery
