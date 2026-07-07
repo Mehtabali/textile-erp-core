@@ -25,7 +25,11 @@ public sealed class SaleVoucherListFiltersRequest
 
     public string? Status { get; set; }
 
-    public DateTime? Date { get; set; }
+    public string? Date { get; set; }
+
+    public DateTime? DateFrom { get; set; }
+
+    public DateTime? DateTo { get; set; }
 
     public string? FloorName { get; set; }
 }

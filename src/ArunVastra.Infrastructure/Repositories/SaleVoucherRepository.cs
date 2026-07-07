@@ -617,9 +617,24 @@ public sealed class SaleVoucherRepository(ArunVastraDbContext dbContext) : ISale
             query = query.Where(voucher => voucher.Status == (byte)statusValue);
         }
 
-        if (filters.Date.HasValue)
+        var (dateFromFilter, dateToFilter) = GetDateRange(filters);
+
+        if (dateFromFilter.HasValue && dateToFilter.HasValue)
         {
-            var date = filters.Date.Value.Date;
+            var dateFrom = dateFromFilter.Value.Date;
+            var dateToExclusive = dateToFilter.Value.Date.AddDays(1);
+
+            if (dateFrom > dateToFilter.Value.Date)
+            {
+                dateFrom = dateToFilter.Value.Date;
+                dateToExclusive = dateFromFilter.Value.Date.AddDays(1);
+            }
+
+            query = query.Where(voucher => voucher.Date >= dateFrom && voucher.Date < dateToExclusive);
+        }
+        else if (TryParseDate(filters.Date, out var exactDate))
+        {
+            var date = exactDate.Date;
             query = query.Where(voucher => voucher.Date.Date == date);
         }
 
@@ -632,6 +647,31 @@ public sealed class SaleVoucherRepository(ArunVastraDbContext dbContext) : ISale
         }
 
         return query;
+    }
+
+    private static (DateTime? DateFrom, DateTime? DateTo) GetDateRange(SaleVoucherListFiltersRequest filters)
+    {
+        if (filters.DateFrom.HasValue && filters.DateTo.HasValue)
+        {
+            return (filters.DateFrom, filters.DateTo);
+        }
+
+        if (NormalizeFilter(filters.Date) is not { } dateFilter || !dateFilter.Contains(" - ", StringComparison.Ordinal))
+        {
+            return (filters.DateFrom, filters.DateTo);
+        }
+
+        var parts = dateFilter.Split(" - ", 2, StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries);
+        return parts.Length == 2 &&
+            TryParseDate(parts[0], out var dateFrom) &&
+            TryParseDate(parts[1], out var dateTo)
+                ? (dateFrom, dateTo)
+                : (filters.DateFrom, filters.DateTo);
+    }
+
+    private static bool TryParseDate(string? value, out DateTime date)
+    {
+        return DateTime.TryParse(NormalizeFilter(value), out date);
     }
 
     private IQueryable<SaleVoucher> ApplySort(

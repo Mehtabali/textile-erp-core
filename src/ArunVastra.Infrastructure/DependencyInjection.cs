@@ -29,6 +29,7 @@ public static class DependencyInjection
         services.AddScoped<IGstRuleService, GstRuleService>();
         services.AddScoped<IAdditionalChargeService, AdditionalChargeService>();
         services.AddScoped<ISaleVoucherService, SaleVoucherService>();
+        services.AddScoped<ISupplierDashboardService, SupplierDashboardService>();
         services.AddScoped<ISupplierTransportMappingService, SupplierTransportMappingService>();
         services.AddScoped<ISupplierCategoryMappingService, SupplierCategoryMappingService>();
         services.AddScoped<IProductListingService, ProductListingService>();
@@ -43,6 +44,7 @@ public static class DependencyInjection
         services.AddScoped<IGstRuleRepository, GstRuleRepository>();
         services.AddScoped<IAdditionalChargeRepository, AdditionalChargeRepository>();
         services.AddScoped<ISaleVoucherRepository, SaleVoucherRepository>();
+        services.AddScoped<ISupplierDashboardRepository, SupplierDashboardRepository>();
         services.AddScoped<ISupplierTransportMappingRepository, SupplierTransportMappingRepository>();
         services.AddScoped<ISupplierCategoryMappingRepository, SupplierCategoryMappingRepository>();
         services.AddScoped<IProductListingRepository, ProductListingRepository>();
