@@ -3,9 +3,11 @@ using ArunVastra.Infrastructure;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.OpenApi;
 using Microsoft.IdentityModel.Tokens;
+using Azure.Monitor.OpenTelemetry.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
-
+builder.Services.AddOpenTelemetry()
+    .UseAzureMonitor();
 // Add services to the container.
 
 const string CorsPolicyName = "AngularClient";
