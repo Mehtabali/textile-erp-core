@@ -19,7 +19,7 @@ builder.Services.AddSwaggerGen(options =>
 {
     options.SwaggerDoc("v1", new OpenApiInfo
     {
-        Title = "Arun Vastra API",
+        Title = "Textile ERP",
         Version = "v1"
     });
 
@@ -105,7 +105,7 @@ app.MapHealthChecks("/health");
 app.UseSwagger();
 app.UseSwaggerUI(options =>
 {
-    options.SwaggerEndpoint("/swagger/v1/swagger.json", "Arun Vastra API v1");
+    options.SwaggerEndpoint("/swagger/v1/swagger.json", "Textile ERP API v1");
 });
 
 app.UseCors(CorsPolicyName);
