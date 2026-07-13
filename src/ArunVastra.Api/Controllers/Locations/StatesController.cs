@@ -1,3 +1,4 @@
+using ArunVastra.Api.Controllers;
 using ArunVastra.Application.DTOs.Locations;
 using ArunVastra.Application.Interfaces;
 using Microsoft.AspNetCore.Mvc;
@@ -5,13 +6,11 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace ArunVastra.Api.Controllers.Locations;
 
-[ApiController]
 [Route("api/states")]
-[Produces("application/json")]
 [SwaggerTag("State lookup endpoints for cascading state and city dropdowns.")]
 public sealed class StatesController(
     IStateService stateService,
-    ICityService cityService) : ControllerBase
+    ICityService cityService) : ApiControllerBase
 {
     private readonly IStateService _stateService = stateService;
     private readonly ICityService _cityService = cityService;

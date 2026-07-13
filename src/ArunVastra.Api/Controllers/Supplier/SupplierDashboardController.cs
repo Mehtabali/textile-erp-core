@@ -1,19 +1,15 @@
-using System.Security.Claims;
+using ArunVastra.Api.Controllers;
 using ArunVastra.Application.DTOs.SupplierDashboard;
 using ArunVastra.Application.Interfaces;
 using ArunVastra.Application.Models;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 
 namespace ArunVastra.Api.Controllers.Supplier;
 
-[ApiController]
-[Authorize]
 [Route("api/supplier/dashboard")]
-[Produces("application/json")]
 [SwaggerTag("Supplier dashboard endpoints.")]
-public sealed class SupplierDashboardController(ISupplierDashboardService supplierDashboardService) : ControllerBase
+public sealed class SupplierDashboardController(ISupplierDashboardService supplierDashboardService) : ApiControllerBase
 {
     private readonly ISupplierDashboardService _supplierDashboardService = supplierDashboardService;
 
@@ -39,15 +35,12 @@ public sealed class SupplierDashboardController(ISupplierDashboardService suppli
 
     private CurrentUserContext GetCurrentUser()
     {
-        var userIdValue = User.FindFirstValue(ClaimTypes.NameIdentifier);
-        var roleValue = User.FindFirstValue(ClaimTypes.Role);
-
-        if (!int.TryParse(userIdValue, out var userId))
+        if (!int.TryParse(CurrentUserId, out var userId))
         {
             throw new InvalidOperationException("Current user id is missing from token.");
         }
 
-        _ = int.TryParse(roleValue, out var role);
+        _ = int.TryParse(CurrentUserRole, out var role);
 
         return new CurrentUserContext
         {

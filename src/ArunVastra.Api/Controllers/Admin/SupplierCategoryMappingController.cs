@@ -1,3 +1,4 @@
+using ArunVastra.Api.Controllers;
 using ArunVastra.Application.DTOs.SupplierCategoryMappings;
 using ArunVastra.Application.Interfaces;
 using Microsoft.AspNetCore.Mvc;
@@ -5,12 +6,10 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace ArunVastra.Api.Controllers.Admin;
 
-[ApiController]
 [Route("api/admin/supplier-category-mapping")]
-[Produces("application/json")]
 [SwaggerTag("Admin endpoints for mapping supplier users from dbo.USERS to product categories from dbo.PRODUCTS through dbo.SUPPRODUCTS.")]
 public sealed class SupplierCategoryMappingController(
-    ISupplierCategoryMappingService supplierCategoryMappingService) : ControllerBase
+    ISupplierCategoryMappingService supplierCategoryMappingService) : ApiControllerBase
 {
     private readonly ISupplierCategoryMappingService _supplierCategoryMappingService =
         supplierCategoryMappingService;

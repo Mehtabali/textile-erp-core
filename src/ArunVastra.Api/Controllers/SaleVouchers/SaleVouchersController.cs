@@ -1,20 +1,16 @@
-using System.Security.Claims;
+using ArunVastra.Api.Controllers;
 using ArunVastra.Application.DTOs.SaleVouchers;
 using ArunVastra.Application.Interfaces;
 using ArunVastra.Application.Models;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Swashbuckle.AspNetCore.Annotations;
 
 namespace ArunVastra.Api.Controllers.SaleVouchers;
 
-[ApiController]
-[Authorize]
 [Route("api/sale-vouchers")]
-[Produces("application/json")]
 [SwaggerTag("Sale voucher endpoints backed by dbo.SALEVOUCHERS, dbo.SALEVOUCHERDETAILS, and dbo.VOUCHERSTATUS.")]
-public sealed class SaleVouchersController(ISaleVoucherService saleVoucherService) : ControllerBase
+public sealed class SaleVouchersController(ISaleVoucherService saleVoucherService) : ApiControllerBase
 {
     private readonly ISaleVoucherService _saleVoucherService = saleVoucherService;
 
@@ -329,15 +325,12 @@ public sealed class SaleVouchersController(ISaleVoucherService saleVoucherServic
 
     private CurrentUserContext GetCurrentUser()
     {
-        var userIdValue = User.FindFirstValue(ClaimTypes.NameIdentifier);
-        var roleValue = User.FindFirstValue(ClaimTypes.Role);
-
-        if (!int.TryParse(userIdValue, out var userId))
+        if (!int.TryParse(CurrentUserId, out var userId))
         {
             throw new InvalidOperationException("Current user id is missing from token.");
         }
 
-        _ = int.TryParse(roleValue, out var role);
+        _ = int.TryParse(CurrentUserRole, out var role);
 
         return new CurrentUserContext
         {

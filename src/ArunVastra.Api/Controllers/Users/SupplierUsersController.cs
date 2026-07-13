@@ -1,3 +1,4 @@
+using ArunVastra.Api.Controllers;
 using ArunVastra.Application.DTOs.Users.Supplier;
 using ArunVastra.Application.Interfaces;
 using Microsoft.AspNetCore.Mvc;
@@ -5,11 +6,9 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace ArunVastra.Api.Controllers.Users;
 
-[ApiController]
 [Route("api/users/suppliers")]
-[Produces("application/json")]
 [SwaggerTag("Supplier user listing endpoints. These endpoints read supplier users from dbo.USERVIEW with ROLE = 1.")]
-public sealed class SupplierUsersController(ISupplierUserService supplierUserService) : ControllerBase
+public sealed class SupplierUsersController(ISupplierUserService supplierUserService) : ApiControllerBase
 {
     private readonly ISupplierUserService _supplierUserService = supplierUserService;
 

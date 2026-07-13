@@ -1,3 +1,4 @@
+using ArunVastra.Api.Controllers;
 using ArunVastra.Application.DTOs.Categories;
 using ArunVastra.Application.Interfaces;
 using Microsoft.AspNetCore.Mvc;
@@ -5,11 +6,9 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace ArunVastra.Api.Controllers.Categories;
 
-[ApiController]
 [Route("api/categories")]
-[Produces("application/json")]
 [SwaggerTag("Product category endpoints. These endpoints read and write dbo.PRODUCTS but expose Category naming.")]
-public sealed class CategoriesController(ICategoryService categoryService) : ControllerBase
+public sealed class CategoriesController(ICategoryService categoryService) : ApiControllerBase
 {
     private readonly ICategoryService _categoryService = categoryService;
 

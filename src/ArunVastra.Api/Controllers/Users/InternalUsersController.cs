@@ -1,3 +1,4 @@
+using ArunVastra.Api.Controllers;
 using ArunVastra.Application.DTOs.Users.Internal;
 using ArunVastra.Application.Interfaces;
 using Microsoft.AspNetCore.Mvc;
@@ -5,11 +6,9 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace ArunVastra.Api.Controllers.Users;
 
-[ApiController]
 [Route("api/users/internal")]
-[Produces("application/json")]
 [SwaggerTag("Internal user management endpoints. These endpoints only read and write USERS rows with ROLE = 0, ROLE = 6, or ROLE = 7.")]
-public sealed class InternalUsersController(IInternalUserService internalUserService) : ControllerBase
+public sealed class InternalUsersController(IInternalUserService internalUserService) : ApiControllerBase
 {
     private readonly IInternalUserService _internalUserService = internalUserService;
 

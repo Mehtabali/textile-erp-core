@@ -1,3 +1,4 @@
+using ArunVastra.Api.Controllers;
 using ArunVastra.Application.DTOs.Locations;
 using ArunVastra.Application.Interfaces;
 using Microsoft.AspNetCore.Mvc;
@@ -5,11 +6,9 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace ArunVastra.Api.Controllers.Locations;
 
-[ApiController]
 [Route("api/cities")]
-[Produces("application/json")]
 [SwaggerTag("City lookup endpoints.")]
-public sealed class CitiesController(ICityService cityService) : ControllerBase
+public sealed class CitiesController(ICityService cityService) : ApiControllerBase
 {
     private readonly ICityService _cityService = cityService;
 

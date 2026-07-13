@@ -1,3 +1,4 @@
+using ArunVastra.Api.Controllers;
 using ArunVastra.Application.DTOs.SupplierTransportMappings;
 using ArunVastra.Application.Interfaces;
 using Microsoft.AspNetCore.Mvc;
@@ -5,12 +6,10 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace ArunVastra.Api.Controllers.Admin;
 
-[ApiController]
 [Route("api/admin/supplier-transport-mapping")]
-[Produces("application/json")]
 [SwaggerTag("Admin endpoints for mapping supplier users from dbo.USERS to transport users from dbo.USERS.")]
 public sealed class SupplierTransportMappingController(
-    ISupplierTransportMappingService supplierTransportMappingService) : ControllerBase
+    ISupplierTransportMappingService supplierTransportMappingService) : ApiControllerBase
 {
     private readonly ISupplierTransportMappingService _supplierTransportMappingService =
         supplierTransportMappingService;

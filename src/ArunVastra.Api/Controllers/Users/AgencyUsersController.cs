@@ -1,3 +1,4 @@
+using ArunVastra.Api.Controllers;
 using ArunVastra.Application.DTOs.Users.Agency;
 using ArunVastra.Application.Interfaces;
 using Microsoft.AspNetCore.Mvc;
@@ -5,11 +6,9 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace ArunVastra.Api.Controllers.Users;
 
-[ApiController]
 [Route("api/users/agency")]
-[Produces("application/json")]
 [SwaggerTag("Agency user management endpoints. These endpoints only read and write USERS rows with ROLE = 4.")]
-public sealed class AgencyUsersController(IAgencyUserService agencyUserService) : ControllerBase
+public sealed class AgencyUsersController(IAgencyUserService agencyUserService) : ApiControllerBase
 {
     private readonly IAgencyUserService _agencyUserService = agencyUserService;
 

@@ -1,3 +1,4 @@
+using ArunVastra.Api.Controllers;
 using ArunVastra.Application.DTOs.GstRules;
 using ArunVastra.Application.Interfaces;
 using Microsoft.AspNetCore.Mvc;
@@ -5,11 +6,9 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace ArunVastra.Api.Controllers.GstRules;
 
-[ApiController]
 [Route("api/gst-rules")]
-[Produces("application/json")]
 [SwaggerTag("GST rule endpoints. These endpoints read and write dbo.GSTRULES.")]
-public sealed class GstRulesController(IGstRuleService gstRuleService) : ControllerBase
+public sealed class GstRulesController(IGstRuleService gstRuleService) : ApiControllerBase
 {
     private readonly IGstRuleService _gstRuleService = gstRuleService;
 

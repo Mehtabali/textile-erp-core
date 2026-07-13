@@ -1,3 +1,4 @@
+using ArunVastra.Api.Controllers;
 using ArunVastra.Application.DTOs.Products;
 using ArunVastra.Application.Interfaces;
 using Microsoft.AspNetCore.Mvc;
@@ -5,11 +6,9 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace ArunVastra.Api.Controllers.Admin;
 
-[ApiController]
 [Route("api/admin/products")]
-[Produces("application/json")]
 [SwaggerTag("Product listing endpoints. These endpoints read supplier products from dbo.SUPITEMVIEW.")]
-public sealed class ProductsController(IProductListingService productListingService) : ControllerBase
+public sealed class ProductsController(IProductListingService productListingService) : ApiControllerBase
 {
     private readonly IProductListingService _productListingService = productListingService;
 

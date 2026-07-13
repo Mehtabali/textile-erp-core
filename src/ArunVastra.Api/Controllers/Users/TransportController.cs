@@ -1,3 +1,4 @@
+using ArunVastra.Api.Controllers;
 using ArunVastra.Application.DTOs.Users.Transport;
 using ArunVastra.Application.Interfaces;
 using Microsoft.AspNetCore.Mvc;
@@ -5,11 +6,9 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace ArunVastra.Api.Controllers.Users;
 
-[ApiController]
 [Route("api/users/transport")]
-[Produces("application/json")]
 [SwaggerTag("Transport user management endpoints. These endpoints only read and write USERS rows with ROLE = 2.")]
-public sealed class TransportController(ITransportUserService transportUserService) : ControllerBase
+public sealed class TransportController(ITransportUserService transportUserService) : ApiControllerBase
 {
     private readonly ITransportUserService _transportUserService = transportUserService;
 

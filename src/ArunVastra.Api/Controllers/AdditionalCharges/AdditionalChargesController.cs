@@ -1,3 +1,4 @@
+using ArunVastra.Api.Controllers;
 using ArunVastra.Application.DTOs.AdditionalCharges;
 using ArunVastra.Application.Interfaces;
 using Microsoft.AspNetCore.Mvc;
@@ -5,11 +6,9 @@ using Swashbuckle.AspNetCore.Annotations;
 
 namespace ArunVastra.Api.Controllers.AdditionalCharges;
 
-[ApiController]
 [Route("api/additional-charges")]
-[Produces("application/json")]
 [SwaggerTag("Additional charge endpoints. These endpoints read and write dbo.ADDITIONALCHARGES.")]
-public sealed class AdditionalChargesController(IAdditionalChargeService additionalChargeService) : ControllerBase
+public sealed class AdditionalChargesController(IAdditionalChargeService additionalChargeService) : ApiControllerBase
 {
     private readonly IAdditionalChargeService _additionalChargeService = additionalChargeService;
 
