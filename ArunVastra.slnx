@@ -1,4 +1,7 @@
 <Solution>
+  <Folder Name="/Solution Items/">
+    <File Path=".env" />
+  </Folder>
   <Folder Name="/src/">
     <Project Path="src/ArunVastra.Api/ArunVastra.Api.csproj" />
     <Project Path="src/ArunVastra.Application/ArunVastra.Application.csproj" />
