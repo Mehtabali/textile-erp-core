@@ -15,7 +15,7 @@ public sealed class SupplierDashboardController(ISupplierDashboardService suppli
 
     [HttpGet]
     [SwaggerOperation(
-        Summary = "Get supplier dashboard",
+        Summary = "Get supplier Dashboard",
         Description = "Returns supplier-specific sale voucher status counts and product activity counts.")]
     [ProducesResponseType(typeof(SupplierDashboardResponse), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(object), StatusCodes.Status400BadRequest)]
